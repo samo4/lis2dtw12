@@ -1,4 +1,4 @@
-# ST Microelectronics LIS2DW12 3-axis accelerometer driver
+# ST Microelectronics LIS2DTW12 3-axis accelerometer driver
 #
 # Copyright (c) 2019 STMicroelectronics
 #
@@ -6,7 +6,7 @@
 #
 zephyr_library()
 
-zephyr_library_sources_ifdef(CONFIG_LIS2DW12            lis2dw12)
-zephyr_library_sources_ifdef(CONFIG_LIS2DW12            lis2dw12_i2c.c)
-zephyr_library_sources_ifdef(CONFIG_LIS2DW12            lis2dw12_spi.c)
-zephyr_library_sources_ifdef(CONFIG_LIS2DW12_TRIGGER    lis2dw12_trigger.c)
+zephyr_library_sources_ifdef(CONFIG_LIS2DTW12            lis2dtw12)
+zephyr_library_sources_ifdef(CONFIG_LIS2DTW12            lis2dtw12_i2c.c)
+zephyr_library_sources_ifdef(CONFIG_LIS2DTW12            lis2dtw12_spi.c)
+zephyr_library_sources_ifdef(CONFIG_LIS2DTW12_TRIGGER    lis2dtw12_trigger.c)

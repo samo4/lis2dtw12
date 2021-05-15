@@ -111,6 +111,7 @@ struct lis2dtw12_data;
 struct lis2dtw12_data {
 	const struct device *bus;
 	int16_t acc[3];
+	int16_t temp;
 
 	 /* save sensitivity */
 	uint16_t gain;

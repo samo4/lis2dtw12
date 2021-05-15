@@ -1,0 +1,30 @@
+{
+    "configurations": [
+        {
+            "name": "Zephyr",
+            "includePath": [
+                "${env:ZEPHYR_BASE}../nrf/include",
+                "${env:ZEPHYR_BASE}../modules/hal/nordic/nrfx/drivers/include",
+                "${env:ZEPHYR_BASE}../modules/hal/nordic/nrfx",
+                "${env:ZEPHYR_BASE}../modules/hal/nordic/nrfx/mdk",
+                "${env:ZEPHYR_BASE}../nrfxlib/bsdlib/include",
+                "${env:ZEPHYR_BASE}../modules/hal/nordic",
+                "${env:ZEPHYR_BASE}include",
+                "${env:ZEPHYR_BASE}subsys/testsuite/ztest/include",
+                "${env:ZEPHYR_BASE}../modules/hal/st/sensor/stmemsc/lis2dtw12_STdC/driver"
+                // "${workspaceFolder}/src/ui/include"
+            ],
+            "forcedInclude": [
+                "${workspaceFolder}/.vscode/c_cpp_undef.h"
+            ],
+            "defines": [
+                "__ZEPHYR__=1"
+            ],
+            "compilerPath": "C:\\gnuarmemb\\bin\\arm-none-eabi-gcc",
+            "cStandard": "c99",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "${default}"
+        }
+    ],
+    "version": 4
+}

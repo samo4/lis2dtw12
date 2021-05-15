@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "ui.h": "c",
+        "dk_buttons_and_leds.h": "c",
+        "sensor.h": "c",
+        "lis2dtw12.h": "c"
+    },
+    "editor.tabSize": 4,
+
+    // Insert spaces when pressing Tab.
+    "editor.insertSpaces": true
+}

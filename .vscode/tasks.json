@@ -1,0 +1,49 @@
+{
+    "version": "2.0.0",
+    "options": {
+    "env": {
+      "BOARD": "thingy91_nrf9160ns",
+      "PRJ_NAME": "",
+      "CONFIG": "",  // -DOVERLAY_CONFIG=<path_relative_to_sample> use ; for multiple files
+      "DTC_OVERLAY": ""  // "-DDTC_OVERLAY_FILE=boards/nucleo_f303re.overlay"  // -DDTC_OVERLAY_FILE=<path_relative_to_sample> use ; for multiple files
+    },
+    "cwd": "${workspaceRoot}"
+  },
+    "tasks": [
+        {
+      "label": "Build Zephyr with WEST",
+      "type": "shell",
+      "command": "west",
+      "args": [
+        "build",
+        "-p",
+        "auto",
+        "-b",
+        "${BOARD}",
+        "${PRJ_NAME}",
+        "${CONFIG}",
+        "${DTC_OVERLAY}"
+      ],
+      "dependsOn": [
+        // "Clean Build"
+       ],
+      "problemMatcher": [ "$gcc" ],
+      "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+      "label": "Clean Build",
+      "type": "shell",
+      "group": "build",
+      "command": "rm",
+      "args": [
+        "-rf",
+        "build"
+      ],
+      "dependsOn": [],
+      "problemMatcher": []
+    },
+    ]
+}

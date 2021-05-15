@@ -121,6 +121,14 @@ static inline void lis2dtw12_channel_get_acc(const struct device *dev,
 	}
 }
 
+static inline void lis2dtw12_channel_get_temp(const struct device *dev, struct sensor_value *val)
+{
+	struct lis2dtw12_data *lis2dtw12 = dev->data;
+	float temperature = lis2dtw12_from_lsb_to_celsius(lis2dtw12->temp);
+	val->val1 = temperature;
+	val->val2 = (temperature - val->val1) * 1000000;
+}
+
 static int lis2dtw12_channel_get(const struct device *dev,
 				 enum sensor_channel chan,
 				 struct sensor_value *val)
@@ -131,6 +139,9 @@ static int lis2dtw12_channel_get(const struct device *dev,
 	case SENSOR_CHAN_ACCEL_Z:
 	case SENSOR_CHAN_ACCEL_XYZ:
 		lis2dtw12_channel_get_acc(dev, chan, val);
+		return 0;
+	case SENSOR_CHAN_AMBIENT_TEMP:
+		lis2dtw12_channel_get_temp(dev, val);
 		return 0;
 	default:
 		LOG_DBG("Channel not supported");
@@ -184,22 +195,36 @@ static int lis2dtw12_sample_fetch(const struct device *dev,
 	uint8_t shift;
 	int16_t buf[3];
 
-	/* fetch raw data sample */
-	if (lis2dtw12_acceleration_raw_get(lis2dtw12->ctx, buf) < 0) {
-		LOG_DBG("Failed to fetch raw data sample");
-		return -EIO;
-	}
+	uint8_t reg;
+	lis2dtw12_flag_data_ready_get(lis2dtw12->ctx, &reg);
+	if (reg) {
+		/* fetch raw data sample */
+		if (lis2dtw12_acceleration_raw_get(lis2dtw12->ctx, buf) < 0) {
+			LOG_DBG("Failed to fetch raw acc sample");
+			return -EIO;
+		}
 
-	/* adjust to resolution */
-	if (cfg->pm == LIS2DTW12_CONT_LOW_PWR_12bit) {
-		shift = LIS2DTW12_SHIFT_PM1;
-	} else {
-		shift = LIS2DTW12_SHIFT_PMOTHER;
-	}
+		/* adjust to resolution */
+		if (cfg->pm == LIS2DTW12_CONT_LOW_PWR_12bit) {
+			shift = LIS2DTW12_SHIFT_PM1;
+		} else {
+			shift = LIS2DTW12_SHIFT_PMOTHER;
+		}
 
-	lis2dtw12->acc[0] = sys_le16_to_cpu(buf[0]) >> shift;
-	lis2dtw12->acc[1] = sys_le16_to_cpu(buf[1]) >> shift;
-	lis2dtw12->acc[2] = sys_le16_to_cpu(buf[2]) >> shift;
+		lis2dtw12->acc[0] = sys_le16_to_cpu(buf[0]) >> shift;
+		lis2dtw12->acc[1] = sys_le16_to_cpu(buf[1]) >> shift;
+		lis2dtw12->acc[2] = sys_le16_to_cpu(buf[2]) >> shift;
+
+		int16_t temp;
+		if (lis2dtw12_temperature_raw_get(lis2dtw12->ctx, &temp) < 0) {
+			// LOG_DBG("Failed to fetch raw temp sample");
+			return -EIO;
+		}
+		lis2dtw12->temp = temp;
+		// LOG_INF("got data x: %d t: %d", lis2dtw12->acc[0], lis2dtw12->temp);
+	} //else {
+	//	LOG_INF("no data ready");
+	//}
 
 	return 0;
 }

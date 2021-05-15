@@ -3,7 +3,8 @@
         "ui.h": "c",
         "dk_buttons_and_leds.h": "c",
         "sensor.h": "c",
-        "lis2dtw12.h": "c"
+        "lis2dtw12.h": "c",
+        "printk.h": "c"
     },
     "editor.tabSize": 4,
 

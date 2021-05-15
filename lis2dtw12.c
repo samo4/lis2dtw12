@@ -50,6 +50,7 @@ static int lis2dtw12_set_range(const struct device *dev, uint16_t range)
 		lis2dtw12->gain =
 			LIS2DTW12_FS_TO_GAIN(LIS2DTW12_FS_TO_REG(range),
 					    shift_gain);
+		LOG_INF("fs %d gain %d", fs, lis2dtw12->gain);
 	}
 
 	return err;
@@ -195,9 +196,9 @@ static int lis2dtw12_sample_fetch(const struct device *dev,
 	uint8_t shift;
 	int16_t buf[3];
 
-	uint8_t reg;
-	lis2dtw12_flag_data_ready_get(lis2dtw12->ctx, &reg);
-	if (reg) {
+	//uint8_t reg;
+	//lis2dtw12_flag_data_ready_get(lis2dtw12->ctx, &reg);
+	//if (reg) {
 		/* fetch raw data sample */
 		if (lis2dtw12_acceleration_raw_get(lis2dtw12->ctx, buf) < 0) {
 			LOG_DBG("Failed to fetch raw acc sample");
@@ -217,13 +218,9 @@ static int lis2dtw12_sample_fetch(const struct device *dev,
 
 		int16_t temp;
 		if (lis2dtw12_temperature_raw_get(lis2dtw12->ctx, &temp) < 0) {
-			// LOG_DBG("Failed to fetch raw temp sample");
 			return -EIO;
 		}
 		lis2dtw12->temp = temp;
-		// LOG_INF("got data x: %d t: %d", lis2dtw12->acc[0], lis2dtw12->temp);
-	} //else {
-	//	LOG_INF("no data ready");
 	//}
 
 	return 0;
